@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>goldcrest-pubsub</title>
+</head>
+<body>
+<div id="app">
+    <h2>Publish messages from client-side JavaScript</h2>
+    <form @submit.prevent="publishViaJavaScript">
+        <input v-model="message_js">
+        <button>Publish</button>
+    </form>
+    <hr>
+    <h2>Publish messages from server-side PHP</h2>
+    <form @submit.prevent="publishViaPhp">
+        <input v-model="message_php">
+        <button>Publish</button>
+    </form>
+    <hr>
+    <h2>Messages from websocket event listener</h2>
+    <ul>
+        <li v-for="message in messages">{{ message }}</li>
+    </ul>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+
+<script>
+    const CHANNEL = 'test-channel';
+
+    let socket = io('http://localhost:8001');
+
+    new Vue({
+        data: {
+            message_js: '',
+            message_php: '',
+            messages: [],
+        },
+        el: '#app',
+        methods: {
+            publishViaJavaScript: function (event) {
+                console.log('EVENT EMIT (JS) this.message = `%s`', this.message_js);
+                socket.emit(CHANNEL, this.message_js);
+                this.message_js = '';
+            },
+            publishViaPhp: function (event) {
+                console.log('EVENT EMIT (PHP) this.message = `%s`', this.message_php);
+                axios.get('publish.php', {
+                    params: {
+                        message: this.message_php
+                    }
+                })
+                    .then(function (response) {
+                        this.message_php = '';
+                    }.bind(this))
+                    .catch(function (error) {
+                        console.error(error);
+                    });
+            }
+        },
+        mounted: function () {
+            socket.on(CHANNEL, function (message) {
+                console.log('EVENT LISTENER message = `%s`', message);
+                this.messages.push(message);
+            }.bind(this));
+        }
+    });
+</script>
+</body>
+</html>
