@@ -10,16 +10,16 @@
 <div id="app">
     <div class="container">
         <div class="my-2 text-center">
-            <button @click="prev">Previous</button>
-            <button @click="next">Next</button>
+            <button @click="slideTo('prev')">Previous</button>
+            <button @click="slideTo('next')">Next</button>
         </div>
         <div id="carousel" class="carousel slide" data-interval="false">
             <ol class="carousel-indicators">
-                <li data-target="#carousel" data-slide-to="0" class="active"></li>
-                <li data-target="#carousel" data-slide-to="1"></li>
-                <li data-target="#carousel" data-slide-to="2"></li>
-                <li data-target="#carousel" data-slide-to="3"></li>
-                <li data-target="#carousel" data-slide-to="4"></li>
+                <li @click="slideTo(0)" class="active"></li>
+                <li @click="slideTo(1)"></li>
+                <li @click="slideTo(2)"></li>
+                <li @click="slideTo(3)"></li>
+                <li @click="slideTo(4)"></li>
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -54,22 +54,15 @@
     new Vue({
         el: '#app',
         methods: {
-            next: function (event) {
-                $('#carousel').carousel('next');
-            },
-            prev: function (event) {
-                $('#carousel').carousel('prev');
+            slideTo: function (index) {
+                socket.emit(CHANNEL, JSON.stringify({
+                    'slideTo': index,
+                }));
             }
         },
         mounted: function () {
             socket.on(CHANNEL, function (message) {
-                $('#carousel').carousel(JSON.parse(message).to);
-            });
-
-            $('#carousel').on('slide.bs.carousel', function (event) {
-                socket.emit(CHANNEL, JSON.stringify({
-                    'to': event.to,
-                }));
+                $('#carousel').carousel(JSON.parse(message).slideTo);
             });
         }
     });
