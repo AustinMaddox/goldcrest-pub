@@ -15,11 +15,12 @@ $pubsub = $redis_client->pubSubLoop();
 // Subscribe to two different channels.
 $pubsub->subscribe('control-channel', 'test-channel');
 
-// Start processing the pubsub messages.
 // Open a terminal and use redis-cli to push messages to the channels.
 // Examples:
 // ./redis-cli PUBLISH test-channel "This is a test"
 // ./redis-cli PUBLISH control-channel terminate-the-loop
+
+// Start processing the pubsub messages.
 foreach ($pubsub as $message) {
     switch ($message->kind) {
         case 'subscribe':

@@ -30,7 +30,6 @@
 
 <script>
     const CHANNEL = 'test-channel';
-
     let socket = io('http://localhost:8001');
 
     new Vue({
@@ -43,14 +42,14 @@
         methods: {
             publishViaJavaScript: function (event) {
                 console.log('EVENT EMIT (JS) this.message = `%s`', this.message_js);
-                socket.emit(CHANNEL, this.message_js);
+                socket.emit(CHANNEL, this.message_js + ' (JS)');
                 this.message_js = '';
             },
             publishViaPhp: function (event) {
                 console.log('EVENT EMIT (PHP) this.message = `%s`', this.message_php);
                 axios.get('publish.php', {
                     params: {
-                        message: this.message_php
+                        message: this.message_php + ' (PHP)'
                     }
                 })
                     .then(function (response) {
