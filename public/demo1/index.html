@@ -42,14 +42,14 @@
         methods: {
             publishViaJavaScript: function (event) {
                 console.log('EVENT EMIT (JS) this.message = `%s`', this.message_js);
-                socket.emit(CHANNEL, this.message_js + ' (JS)');
+                socket.emit(CHANNEL, this.message_js);
                 this.message_js = '';
             },
             publishViaPhp: function (event) {
                 console.log('EVENT EMIT (PHP) this.message = `%s`', this.message_php);
                 axios.get('publish.php', {
                     params: {
-                        message: this.message_php + ' (PHP)'
+                        message: this.message_php
                     }
                 })
                     .then(function (response) {
@@ -58,7 +58,7 @@
                     .catch(function (error) {
                         console.error(error);
                     });
-            }
+            },
         },
         mounted: function () {
             socket.on(CHANNEL, function (message) {
