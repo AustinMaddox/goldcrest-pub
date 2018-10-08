@@ -1,6 +1,6 @@
 <?php
 
-include_once dirname(__FILE__) . '/../vendor/autoload.php';
+include_once dirname(__FILE__) . '/../../vendor/autoload.php';
 
 $redis_client = new Predis\Client([
     'host'   => 'redis-4-0',
