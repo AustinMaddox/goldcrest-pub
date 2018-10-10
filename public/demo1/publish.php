@@ -8,4 +8,4 @@ $redis_client = new Predis\Client([
     'scheme' => 'tcp',
 ]);
 
-$redis_client->publish('test-channel', $_GET['message']);
+$redis_client->publish('channel-for-demos', $_GET['message']);

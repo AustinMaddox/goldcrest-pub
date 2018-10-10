@@ -32,8 +32,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
 <script>
-    const CHANNEL = 'test-channel';
-    let socket = io('http://localhost:8001');
+    const CHANNEL = 'channel-for-demos';
+    const SOCKET = io('http://localhost:8001');
 
     new Vue({
         data: {
@@ -48,13 +48,13 @@
         el: '#app',
         methods: {
             slideTo: function (index) {
-                socket.emit(CHANNEL, JSON.stringify({
+                SOCKET.emit(CHANNEL, JSON.stringify({
                     'slideTo': index,
                 }));
             }
         },
         mounted: function () {
-            socket.on(CHANNEL, function (message) {
+            SOCKET.on(CHANNEL, function (message) {
                 let msg = JSON.parse(message);
                 $('#carousel').carousel(msg.slideTo);
             });

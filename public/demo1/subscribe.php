@@ -13,7 +13,7 @@ $redis_client = new Predis\Client([
 $pubsub = $redis_client->pubSubLoop();
 
 // Subscribe to two different channels.
-$pubsub->subscribe('control-channel', 'test-channel');
+$pubsub->subscribe('control-channel', 'channel-for-demos');
 
 // Open a terminal and use redis-cli to push messages to the channels.
 // Examples:

@@ -29,8 +29,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
 
 <script>
-    const CHANNEL = 'test-channel';
-    let socket = io('http://localhost:8001');
+    const CHANNEL = 'channel-for-demos';
+    const SOCKET = io('http://localhost:8001');
 
     new Vue({
         data: {
@@ -42,7 +42,7 @@
         methods: {
             publishViaJavaScript: function (event) {
                 console.log('EVENT EMIT (JS) this.message = `%s`', this.message_js);
-                socket.emit(CHANNEL, this.message_js);
+                SOCKET.emit(CHANNEL, this.message_js);
                 this.message_js = '';
             },
             publishViaPhp: function (event) {
@@ -61,7 +61,7 @@
             },
         },
         mounted: function () {
-            socket.on(CHANNEL, function (message) {
+            SOCKET.on(CHANNEL, function (message) {
                 console.log('EVENT LISTENER message = `%s`', message);
                 this.messages.push(message);
             }.bind(this));
