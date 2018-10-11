@@ -1,5 +1,7 @@
 <?php
 
+header('Content-Type: application/json; charset=UTF-8', true, 200);
+
 include_once dirname(__FILE__) . '/../../vendor/autoload.php';
 
 $redis_client = new Predis\Client([
@@ -9,3 +11,7 @@ $redis_client = new Predis\Client([
 ]);
 
 $redis_client->publish('channel-for-demos', $_GET['message']);
+
+echo json_encode([
+    'message' => $_GET['message'],
+]);

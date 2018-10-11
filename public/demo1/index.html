@@ -41,11 +41,13 @@
         el: '#app',
         methods: {
             publishViaJavaScript: function (event) {
+                // Event broadcaster.
                 console.log('EVENT EMIT (JS) this.message = `%s`', this.message_js);
                 SOCKET.emit(CHANNEL, this.message_js);
                 this.message_js = '';
             },
             publishViaPhp: function (event) {
+                // Make AJAX request to PHP script which will broadcast the event.
                 console.log('EVENT EMIT (PHP) this.message = `%s`', this.message_php);
                 axios.get('publish.php', {
                     params: {
@@ -61,6 +63,7 @@
             },
         },
         mounted: function () {
+            // Event listener.
             SOCKET.on(CHANNEL, function (message) {
                 console.log('EVENT LISTENER message = `%s`', message);
                 this.messages.push(message);

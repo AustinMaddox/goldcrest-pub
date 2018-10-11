@@ -48,12 +48,14 @@
         el: '#app',
         methods: {
             slideTo: function (index) {
+                // Event broadcaster.
                 SOCKET.emit(CHANNEL, JSON.stringify({
                     'slideTo': index,
                 }));
             }
         },
         mounted: function () {
+            // Event listener.
             SOCKET.on(CHANNEL, function (message) {
                 let msg = JSON.parse(message);
                 $('#carousel').carousel(msg.slideTo);
